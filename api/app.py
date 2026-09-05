@@ -30,6 +30,9 @@ from smithing.functions.leveling_plan_A1 import leveling_plan_A1
 from smithing.functions.aggregate_plan_global import aggregate_plan_global
 from smithing.functions.LevelWhenXP import LevelWhenXP
 
+def handler(request):
+    return {"status": "ok"}
+
 
 # ============================================================
 # Build smelting efficiency DataFrame
