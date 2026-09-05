@@ -1,6 +1,10 @@
+from fastapi import FastAPI
 from winds_of_valen.app import df_smelting, df_planA1
 
-def handler(request):
+app = FastAPI()
+
+@app.get("/")
+def root():
     return {
         "status": "ok",
         "smelting_rows": len(df_smelting),
