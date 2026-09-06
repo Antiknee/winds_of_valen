@@ -47,6 +47,16 @@ th {
   background: #eee;
 }
 
+pre {
+  background: #111;
+  color: #0f0;
+  padding: 15px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
 .error {
   color: red;
   font-weight: bold;
