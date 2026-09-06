@@ -11,12 +11,30 @@
     <h1>Winds of Valen – Crafting & Leveling Tools</h1>
   </header>
 
-  <section class="controls">
-    <button data-endpoint="resolve">Resolve</button>
-    <button data-endpoint="leveling">Leveling Plan</button>
-    <button data-endpoint="smelting">Smelting Efficiency</button>
-    <button id="forestBtn">Global Forest</button>
-  </section>
+<section class="controls">
+  <h3>Core Functions</h3>
+  <button onclick="callAPI('run_function?name=resolve')">Resolve</button>
+  <button onclick="callAPI('run_function?name=resolve_chain')">Resolve Chain</button>
+  <button onclick="callAPI('run_function?name=resolve_time')">Resolve Time</button>
+  <button onclick="callAPI('run_function?name=classify')">Classify</button>
+  <button onclick="callAPI('run_function?name=tier_efficiency')">Tier Efficiency</button>
+  <button onclick="callAPI('run_function?name=best_item_for_level')">Best Item (Level)</button>
+  <button onclick="callAPI('run_function?name=best_item_for_level_chain')">Best Item Chain</button>
+  <button onclick="callAPI('run_function?name=leveling_plan_A1')">Leveling Plan A1</button>
+  <button onclick="callAPI('run_function?name=aggregate_plan_global')">Aggregate Global Plan</button>
+  <button onclick="callAPI('run_function?name=build_usage_graph')">Usage Graph</button>
+  <button onclick="callAPI('run_function?name=print_usage_tree')">Usage Tree</button>
+  <button onclick="callAPI('run_function?name=print_global_forest')">Global Forest</button>
+  <button onclick="callAPI('run_function?name=format_hm')">Format HM</button>
+
+  <h3>Pipelines</h3>
+  <button onclick="callAPI('run_function?name=global_material_totals')">Global Material Totals</button>
+  <button onclick="callAPI('run_function?name=levelpath_builder')">Levelpath Builder</button>
+  <button onclick="callAPI('run_function?name=planA1_runner')">Plan A1 Runner</button>
+  <button onclick="callAPI('run_function?name=raw_material_summary')">Raw Material Summary</button>
+  <button onclick="callAPI('run_function?name=smelting_dataframe')">Smelting Dataframe</button>
+</section>
+
 
   <section id="output">
     <h2>Output</h2>
