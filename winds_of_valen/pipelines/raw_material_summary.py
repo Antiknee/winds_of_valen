@@ -8,8 +8,6 @@ This module extracts ONLY raw materials from each step's
 full recursive material list.
 """
 
-import pandas as pd
-
 from winds_of_valen.pipelines.smelting_dataframe import build_smelting_dataframe
 from winds_of_valen.functions.leveling_plan_A1 import leveling_plan_A1
 from winds_of_valen.global_dicts.raw_items import raw_items
@@ -20,22 +18,16 @@ def build_raw_material_summary(
     target_level: int = 60
 ):
     """
-    Build a DataFrame summarizing total raw materials required
+    Build a JSON‑serializable summary of total raw materials required
     for the full leveling plan.
-
-    Parameters
-    ----------
-    start_xp : int
-        Starting smithing XP.
-    target_level : int
-        Target smithing level.
 
     Returns
     -------
-    pandas.DataFrame
-        Columns:
-            raw_material
-            total_required
+    dict
+        {
+            "columns": [...],
+            "rows": [...]
+        }
     """
 
     # Build smelting dataframe
@@ -52,10 +44,11 @@ def build_raw_material_summary(
             if mat in raw_items:
                 raw_totals[mat] = raw_totals.get(mat, 0) + qty
 
-    summary_rows = [
-        {"raw_material": mat, "total_required": qty}
-        for mat, qty in raw_totals.items()
-    ]
+    # Convert to JSON table format
+    columns = ["raw_material", "total_required"]
+    rows = [[mat, qty] for mat, qty in raw_totals.items()]
 
-    df_raw_summary = pd.DataFrame(summary_rows)
-    return df_raw_summary
+    return {
+        "columns": columns,
+        "rows": rows
+    }

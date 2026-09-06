@@ -14,8 +14,6 @@ Each row includes:
 - immediate recipe totals
 """
 
-import pandas as pd
-
 from winds_of_valen.pipelines.smelting_dataframe import build_smelting_dataframe
 from winds_of_valen.functions.leveling_plan_A1 import leveling_plan_A1
 from winds_of_valen.functions.immediate_recipe_totals import immediate_recipe_totals
@@ -28,16 +26,15 @@ def build_levelpath_csv(
     output_path: str = "levelpath.csv"
 ):
     """
-    Generate the full levelpath CSV for a leveling run.
+    Generate the full levelpath JSON for a leveling run.
 
-    Parameters
-    ----------
-    start_xp : int
-        Starting smithing XP.
-    target_level : int
-        Target smithing level.
-    output_path : str
-        CSV file path to write.
+    Returns
+    -------
+    dict
+        {
+            "columns": [...],
+            "rows": [...]
+        }
     """
 
     # Build smelting dataframe
@@ -54,20 +51,33 @@ def build_levelpath_csv(
 
         imm = immediate_recipe_totals(item, cycles)
 
-        rows.append({
-            "item": item,
-            "from_level": step["from_level"],
-            "to_level": step["to_level"],
-            "total_cycles": cycles,
-            "total_exp": step["exp_gained"],
-            "total_time_seconds": step["time_seconds"],
-            "materials": ", ".join(f"{k}: {v}" for k, v in step["materials"].items()),
-            "immediate_recipe_totals": ", ".join(f"{k}: {v}" for k, v in imm.items()),
-            "total_output": cycles,
-            "time_hm": format_hm(step["time_seconds"]),
-        })
+        rows.append([
+            item,
+            step["from_level"],
+            step["to_level"],
+            cycles,
+            step["exp_gained"],
+            step["time_seconds"],
+            ", ".join(f"{k}: {v}" for k, v in step["materials"].items()),
+            ", ".join(f"{k}: {v}" for k, v in imm.items()),
+            cycles,
+            format_hm(step["time_seconds"])
+        ])
 
-    df_path = pd.DataFrame(rows)
-    # df_path.to_csv(output_path, index=False)
+    columns = [
+        "item",
+        "from_level",
+        "to_level",
+        "total_cycles",
+        "total_exp",
+        "total_time_seconds",
+        "materials",
+        "immediate_recipe_totals",
+        "total_output",
+        "time_hm"
+    ]
 
-    return df_path
+    return {
+        "columns": columns,
+        "rows": rows
+    }

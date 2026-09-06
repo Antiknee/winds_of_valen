@@ -11,9 +11,31 @@ from winds_of_valen.functions.leveling_plan_A1 import leveling_plan_A1
 from winds_of_valen.functions.aggregate_plan_global import aggregate_plan_global
 
 
-df, df_smelting = build_smelting_dataframe()
+def planA1_runner(start_xp: int = 1, target_level: int = 60):
+    """
+    Run the full A1 leveling plan and return JSON‑serializable table data.
 
-planA1_raw = leveling_plan_A1(1, 60, df_smelting)
-planA1 = aggregate_plan_global(planA1_raw)
+    Returns
+    -------
+    dict
+        {
+            "columns": [...],
+            "rows": [...]
+        }
+    """
 
-df_planA1 = pd.DataFrame(planA1)
+    # Build smelting dataframe
+    df, df_smelting = build_smelting_dataframe()
+
+    # Run A1 leveling plan
+    planA1_raw = leveling_plan_A1(start_xp, target_level, df_smelting)
+    planA1 = aggregate_plan_global(planA1_raw)
+
+    # Convert to DataFrame
+    df_planA1 = pd.DataFrame(planA1)
+
+    # Convert DataFrame → JSON table
+    return {
+        "columns": list(df_planA1.columns),
+        "rows": df_planA1.values.tolist()
+    }

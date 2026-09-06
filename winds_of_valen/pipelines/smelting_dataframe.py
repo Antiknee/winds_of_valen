@@ -1,18 +1,9 @@
 """
 smelting_dataframe.py
 
-Generates a full smelting efficiency dataframe for all craftable items.
-Includes:
-- slot cost
-- per‑run quantities
-- focused vs full‑chain EXP
-- focused vs full‑chain time
-- efficiencies
-- time to reach 10 million XP
-- tier classification
+Generates a full smelting efficiency table for all craftable items.
+Returns JSON‑serializable dicts instead of pandas DataFrames.
 """
-
-import pandas as pd
 
 from winds_of_valen.global_dicts.recipes_item import item_recipes
 from winds_of_valen.global_dicts.material_breakdown_recipes import material_breakdown_recipes
@@ -26,6 +17,22 @@ from winds_of_valen.functions.tier_efficiency import tier_efficiency
 
 
 def build_smelting_dataframe():
+    """
+    Returns
+    -------
+    dict
+        {
+            "sorted": {
+                "columns": [...],
+                "rows": [...]
+            },
+            "unsorted": {
+                "columns": [...],
+                "rows": [...]
+            }
+        }
+    """
+
     records = []
 
     df_items = list(item_recipes.keys()) + list(material_breakdown_recipes.keys())
@@ -51,7 +58,6 @@ def build_smelting_dataframe():
 
         # focused time (immediate recipe only)
         focused_time_per_item = craft_time.get(item, 0)
-
         smelt_cycle_duration = focused_time_per_item * per_run
 
         # focused efficiency
@@ -85,9 +91,6 @@ def build_smelting_dataframe():
             if full_chain_exp_per_run > 0 else float("inf")
         )
 
-        # per-item full-chain duration
-        smelt_chain_duration = total_time_per_recipe
-
         time_to_10m_chain_hm = format_hm(time_to_10m_chain)
         time_to_10m_cycle_hm = format_hm(time_to_10m_cycle)
 
@@ -106,7 +109,7 @@ def build_smelting_dataframe():
             "smelt_cycle_materials": focused_run_recipe,
             "smelt_cycle_exp": focused_run_exp,
             "smelt_cycle_duration": smelt_cycle_duration,
-            "smelt_chain_duration": smelt_chain_duration,
+            "smelt_chain_duration": total_time_per_recipe,
 
             "cycle_efficiency": round(efficiency_focused_time, 1),
             "chain_efficiency": round(efficiency_chain, 1),
@@ -118,9 +121,29 @@ def build_smelting_dataframe():
             "chain_tier": tier_efficiency(round(efficiency_chain, 1)),
         })
 
-    df = pd.DataFrame(records)
-    df_smelting = df.copy()
+    # Build columns list
+    columns = list(records[0].keys()) if records else []
 
-    df = df.sort_values(by="cycle_efficiency", ascending=False)
+    # Unsorted table
+    unsorted_rows = [
+        [rec[col] for col in columns]
+        for rec in records
+    ]
 
-    return df, df_smelting
+    # Sorted table (by cycle_efficiency desc)
+    sorted_records = sorted(records, key=lambda r: r["cycle_efficiency"], reverse=True)
+    sorted_rows = [
+        [rec[col] for col in columns]
+        for rec in sorted_records
+    ]
+
+    return {
+        "sorted": {
+            "columns": columns,
+            "rows": sorted_rows
+        },
+        "unsorted": {
+            "columns": columns,
+            "rows": unsorted_rows
+        }
+    }
