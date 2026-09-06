@@ -1,16 +1,22 @@
 async function callAPI(endpoint) {
   const url = `/api/${endpoint}`;
-  const container = document.getElementById("tableContainer");
+  const table = document.getElementById("tableContainer");
   const forest = document.getElementById("forestOutput");
 
-  container.innerHTML = "";
+  table.innerHTML = "";
   forest.innerHTML = "Loading...";
 
   try {
     const response = await fetch(url);
+
+    if (!response.ok) {
+      forest.innerHTML = `Error calling ${endpoint}`;
+      return;
+    }
+
     const data = await response.json();
 
-    // If endpoint returns text instead of table
+    // If backend returns text (forest output)
     if (data.text) {
       forest.innerHTML = data.text;
       return;
@@ -89,5 +95,5 @@ document.querySelectorAll("button[data-endpoint]").forEach(btn => {
   btn.onclick = () => callAPI(btn.dataset.endpoint);
 });
 
-// Bind forest button
+// Forest button
 document.getElementById("forestBtn").onclick = () => callAPI("print_global_forest");
