@@ -1,13 +1,16 @@
-"""
+﻿"""
 smelting_dataframe.py
 
 Generates a full smelting efficiency table for all craftable items.
 Returns JSON‑serializable dicts instead of pandas DataFrames.
 """
 
-from winds_of_valen.global_dicts.item_recipes import item_recipes
-from winds_of_valen.global_dicts.material_breakdown_recipes import material_breakdown_recipes
-from winds_of_valen.global_dicts.craft_time import craft_time
+from winds_of_valen.global_dicts.global_data import global_data
+item_recipes = global_data["item_recipes"]
+from winds_of_valen.global_dicts.global_data import global_data
+material_breakdown_recipes = global_data["material_breakdown_recipes"]
+from winds_of_valen.global_dicts.global_data import global_data
+craft_time = global_data["craft_time"]
 
 from winds_of_valen.functions.resolve import resolve
 from winds_of_valen.functions.resolve_time import resolve_time
@@ -147,3 +150,4 @@ def build_smelting_dataframe():
             "rows": unsorted_rows
         }
     }
+

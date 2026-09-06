@@ -1,4 +1,4 @@
-"""
+﻿"""
 resolve_chain.py
 
 Fully resolve an item into:
@@ -8,10 +8,12 @@ Fully resolve an item into:
 - total recursive time
 """
 
-from winds_of_valen.global_dicts.full_recipes import full_recipes
-from winds_of_valen.global_dicts.exp_table import exp_table
+from winds_of_valen.global_dicts.global_data import global_data
+full_recipes = global_data["full_recipes"]
+from winds_of_valen.global_dicts.skill_exp_table import skill_exp_table
 from winds_of_valen.global_dicts.mining_exp import mining_exp
-from winds_of_valen.global_dicts.raw_items import raw_items
+from winds_of_valen.global_dicts.global_data import global_data
+raw_items = global_data["raw_items"]
 
 from winds_of_valen.functions.resolve_time import resolve_time
 
@@ -25,8 +27,8 @@ def resolve_chain(item: str, qty: int = 1) -> dict:
         nonlocal recursive_smithing_exp, raw_mining_exp
 
         # smithing XP for ANY craftable item
-        if name in exp_table:
-            recursive_smithing_exp += exp_table[name] * count
+        if name in skill_exp_table:
+            recursive_smithing_exp += skill_exp_table[name] * count
 
         # mining XP for raw materials
         if name in mining_exp:
@@ -54,3 +56,4 @@ def resolve_chain(item: str, qty: int = 1) -> dict:
         "raw_mining_exp": raw_mining_exp,
         "total_time": total_time,
     }
+

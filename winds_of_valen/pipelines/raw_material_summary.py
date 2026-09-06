@@ -1,4 +1,4 @@
-"""
+﻿"""
 raw_material_summary.py
 
 Generate a summary of total raw materials required for a full
@@ -10,7 +10,8 @@ full recursive material list.
 
 from winds_of_valen.pipelines.smelting_dataframe import build_smelting_dataframe
 from winds_of_valen.functions.leveling_plan_A1 import leveling_plan_A1
-from winds_of_valen.global_dicts.raw_items import raw_items
+from winds_of_valen.global_dicts.global_data import global_data
+raw_items = global_data["raw_items"]
 
 
 def build_raw_material_summary(
@@ -52,3 +53,4 @@ def build_raw_material_summary(
         "columns": columns,
         "rows": rows
     }
+

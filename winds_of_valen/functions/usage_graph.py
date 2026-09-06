@@ -1,4 +1,4 @@
-"""
+﻿"""
 usage_graph.py
 
 Build a reverse dependency graph mapping:
@@ -11,7 +11,8 @@ This allows you to see:
 """
 
 from collections import defaultdict
-from winds_of_valen.global_dicts.full_recipes import full_recipes
+from winds_of_valen.global_dicts.global_data import global_data
+full_recipes = global_data["full_recipes"]
 
 
 def build_usage_graph():
@@ -35,3 +36,4 @@ def build_usage_graph():
 
 # Precompute global usage graph
 uses_graph = build_usage_graph()
+

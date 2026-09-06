@@ -1,4 +1,4 @@
-"""
+﻿"""
 best_item_for_level.py
 
 Determine the best item to craft at a given level based on
@@ -7,7 +7,8 @@ cycle or chain efficiency.
 Returns the DataFrame row of the best item.
 """
 
-from winds_of_valen.global_dicts.level_req import level_req
+from winds_of_valen.global_dicts.global_data import global_data
+level_req = global_data["level_req"]
 from winds_of_valen.pipelines.smelting_dataframe import build_smelting_dataframe
 
 # Build the smelting dataframe once at import time
@@ -45,3 +46,4 @@ def best_item_for_level(level: int):
         return max(row["cycle_efficiency"], row["chain_efficiency"])
 
     return max(allowed, key=score)
+

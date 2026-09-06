@@ -1,4 +1,4 @@
-"""
+﻿"""
 stackable.py
 
 Indicates whether an item stacks in inventory.
@@ -10,9 +10,12 @@ Rules:
 - Special items (Essence, Schematics) may stack.
 """
 
-from winds_of_valen.global_dicts.raw_items import raw_items
-from winds_of_valen.global_dicts.material_breakdown_recipes import material_breakdown_recipes
-from winds_of_valen.global_dicts.item_recipes import item_recipes
+from winds_of_valen.global_dicts.global_data import global_data
+raw_items = global_data["raw_items"]
+from winds_of_valen.global_dicts.global_data import global_data
+material_breakdown_recipes = global_data["material_breakdown_recipes"]
+from winds_of_valen.global_dicts.global_data import global_data
+item_recipes = global_data["item_recipes"]
 
 stackable: dict[str, bool] = {
     "Essence": True,
@@ -59,3 +62,4 @@ def is_stackable(name: str) -> bool:
     Any missing item defaults to False.
     """
     return stackable.get(name, False)
+

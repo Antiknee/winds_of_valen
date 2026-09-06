@@ -1,5 +1,5 @@
-"""
-exp_table.py
+﻿"""
+skill_exp_table.py
 
 Smithing XP awarded for crafting each item.
 
@@ -19,5 +19,6 @@ mining_exp: dict[str, int] = {
     "Gold Ore": 350
     # "Ebony Ore": 550
 }
+
 
 

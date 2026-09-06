@@ -1,5 +1,5 @@
-"""
-exp_table.py
+﻿"""
+skill_exp_table.py
 
 Smithing XP awarded for crafting each item.
 
@@ -9,7 +9,7 @@ Example:
     "Bronze Platebody": 60
 """
 
-exp_table: dict[str, int] = {
+skill_exp_table: dict[str, int] = {
     "Bronze Bar": 15,
     "Bronze Helmet": 60,
     "Bronze Platebody": 60,
@@ -88,5 +88,6 @@ exp_table: dict[str, int] = {
     "Gold Ore": 350
     # "Ebony Ore": 550
 }
+
 
 

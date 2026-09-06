@@ -1,4 +1,4 @@
-# xp_table: dict[int, int]
+﻿# skill_exp_table: dict[int, int]
 """
 Exact XP thresholds for levels 1–99.
 
@@ -9,7 +9,7 @@ Example from source:
     ...
     99: 397335504
 """
-xp_table = {
+skill_exp_table = {
     1: 0,
     2: 74,
     3: 160,
@@ -113,9 +113,10 @@ xp_table = {
 
 def LevelWhenXP(xp):
     # Find highest level whose XP threshold is <= xp
-    for lvl in sorted(xp_table.keys(), reverse=True):
-        if xp >= xp_table[lvl]:
+    for lvl in sorted(skill_exp_table.keys(), reverse=True):
+        if xp >= skill_exp_table[lvl]:
             return lvl
     return 1
+
 
 

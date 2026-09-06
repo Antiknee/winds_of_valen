@@ -1,4 +1,4 @@
-"""
+﻿"""
 resolve.py
 
 Resolve an item into:
@@ -11,10 +11,12 @@ Resolve an item into:
 - full dependency chain
 """
 
-from winds_of_valen.global_dicts.full_recipes import full_recipes
-from winds_of_valen.global_dicts.exp_table import exp_table
+from winds_of_valen.global_dicts.global_data import global_data
+full_recipes = global_data["full_recipes"]
+from winds_of_valen.global_dicts.skill_exp_table import skill_exp_table
 from winds_of_valen.global_dicts.mining_exp import mining_exp
-from winds_of_valen.global_dicts.raw_items import raw_items
+from winds_of_valen.global_dicts.global_data import global_data
+raw_items = global_data["raw_items"]
 
 
 def resolve(item: str, qty: int = 1) -> dict:
@@ -55,8 +57,8 @@ def resolve(item: str, qty: int = 1) -> dict:
         chain.append((name, count))
 
         # smithing XP for intermediate crafts (exclude final craft)
-        if name in exp_table and name != item:
-            recursive_smithing_exp += exp_table[name] * count
+        if name in skill_exp_table and name != item:
+            recursive_smithing_exp += skill_exp_table[name] * count
 
         # mining XP for raw materials
         if name in mining_exp:
@@ -73,7 +75,7 @@ def resolve(item: str, qty: int = 1) -> dict:
 
     expand(item, qty)
 
-    recipe_exp = exp_table.get(item, 0)
+    recipe_exp = skill_exp_table.get(item, 0)
     total_smithing_exp = recipe_exp + recursive_smithing_exp
 
     return {
@@ -85,3 +87,4 @@ def resolve(item: str, qty: int = 1) -> dict:
         "total_smithing_exp": total_smithing_exp,
         "chain": chain,
     }
+

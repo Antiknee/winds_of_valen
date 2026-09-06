@@ -1,4 +1,4 @@
-"""
+﻿"""
 resolve_time.py
 
 Compute total crafting time for an item including all recursive
@@ -12,8 +12,10 @@ Returns:
     total seconds (float)
 """
 
-from winds_of_valen.global_dicts.craft_time import craft_time
-from winds_of_valen.global_dicts.full_recipes import full_recipes
+from winds_of_valen.global_dicts.global_data import global_data
+craft_time = global_data["craft_time"]
+from winds_of_valen.global_dicts.global_data import global_data
+full_recipes = global_data["full_recipes"]
 
 
 def resolve_time(item: str, qty: int = 1) -> float:
@@ -44,3 +46,4 @@ def resolve_time(item: str, qty: int = 1) -> float:
         total += resolve_time(ing["name"], ing["count"] * qty)
 
     return total
+
