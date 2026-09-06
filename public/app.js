@@ -1,35 +1,38 @@
 async function callAPI(endpoint) {
   const url = `/api/${endpoint}`;
+
   const table = document.getElementById("tableContainer");
   const forest = document.getElementById("forestOutput");
+  const debug = document.getElementById("debugOutput");
 
   table.innerHTML = "";
-  forest.innerHTML = "Loading...";
+  forest.innerHTML = "";
+  debug.innerHTML = "Loading...";
 
   try {
     const response = await fetch(url);
-
-    if (!response.ok) {
-      forest.innerHTML = `Error calling ${endpoint}`;
-      return;
-    }
-
     const data = await response.json();
 
-    // If backend returns text (forest output)
+    // Show debug info
+    debug.innerHTML = JSON.stringify(data, null, 2);
+
+    // If backend returned text (forest)
     if (data.text) {
       forest.innerHTML = data.text;
       return;
     }
 
-    forest.innerHTML = "";
-    renderAnyJSON(data);
+    // If backend returned a table-like structure
+    if (data.return_value && typeof data.return_value === "object") {
+      renderAnyJSON(data.return_value);
+      return;
+    }
 
   } catch (err) {
-    forest.innerHTML = `Error calling ${endpoint}`;
-    console.error(err);
+    debug.innerHTML = `Frontend error: ${err}`;
   }
 }
+
 
 function renderAnyJSON(data) {
   const container = document.getElementById("tableContainer");

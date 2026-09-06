@@ -61,3 +61,14 @@ pre {
   color: red;
   font-weight: bold;
 }
+
+
+#debugOutput {
+  background: #222;
+  color: #0f0;
+  padding: 15px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-top: 20px;
+  font-size: 14px;
+}
