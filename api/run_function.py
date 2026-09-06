@@ -1,5 +1,9 @@
 from fastapi import FastAPI, HTTPException
 import importlib
+import io
+import sys
+import traceback
+import json
 
 app = FastAPI()
 
@@ -7,35 +11,58 @@ app = FastAPI()
 def run_function(name: str):
     """
     Dynamically load and execute any function inside winds_of_valen/functions or pipelines.
-    Example:
-      /api/run_function?name=resolve_chain
-      /api/run_function?name=smelting_dataframe
+    Returns full debug info so the frontend can display errors and raw output.
     """
 
-    # Try functions folder
+    debug = {
+        "function": name,
+        "stdout": "",
+        "return_type": "",
+        "return_value": "",
+        "error": "",
+        "traceback": ""
+    }
+
+    # Capture stdout
+    buffer = io.StringIO()
+    real_stdout = sys.stdout
+    sys.stdout = buffer
+
     try:
-        module = importlib.import_module(f"winds_of_valen.functions.{name}")
-    except ModuleNotFoundError:
-        # Try pipelines folder
+        # Try functions folder
         try:
-            module = importlib.import_module(f"winds_of_valen.functions.pipelines.{name}")
+            module = importlib.import_module(f"winds_of_valen.functions.{name}")
         except ModuleNotFoundError:
-            raise HTTPException(status_code=404, detail=f"Function '{name}' not found")
+            # Try pipelines folder
+            module = importlib.import_module(f"winds_of_valen.functions.pipelines.{name}")
 
-    # Find a callable with the same name as the module
-    if hasattr(module, name):
+        if not hasattr(module, name):
+            raise AttributeError(f"Module '{name}' has no function '{name}'")
+
         func = getattr(module, name)
-    else:
-        raise HTTPException(status_code=400, detail=f"Module '{name}' has no function '{name}'")
 
-    # Execute the function
-    try:
+        # Execute function
         result = func()
+
+        # Restore stdout
+        sys.stdout = real_stdout
+        debug["stdout"] = buffer.getvalue()
+
+        # Return type
+        debug["return_type"] = str(type(result))
+
+        # Try JSON serialization
+        try:
+            json.dumps(result)
+            debug["return_value"] = result
+        except Exception:
+            debug["return_value"] = str(result)
+
+        return debug
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-    # Convert result to JSON-friendly format
-    if isinstance(result, (dict, list, str, int, float, bool)):
-        return {"result": result}
-
-    return {"result": str(result)}
+        sys.stdout = real_stdout
+        debug["stdout"] = buffer.getvalue()
+        debug["error"] = str(e)
+        debug["traceback"] = traceback.format_exc()
+        return debug
