@@ -5,7 +5,7 @@ Generates a full smelting efficiency table for all craftable items.
 Returns JSON‑serializable dicts instead of pandas DataFrames.
 """
 
-from winds_of_valen.global_dicts.recipes_item import item_recipes
+from winds_of_valen.global_dicts.item_recipes import item_recipes
 from winds_of_valen.global_dicts.material_breakdown_recipes import material_breakdown_recipes
 from winds_of_valen.global_dicts.craft_time import craft_time
 
